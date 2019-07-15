@@ -41,6 +41,7 @@ public class ControladorVentas implements iControladorVentas {
     private HashMap<Long, producto> productosStock = new HashMap<>();
     
     public ControladorVentas() {
+       this.estadosProductos= new HashMap<>();
         this.estadosProductos.put(1, "Stock");
         this.estadosProductos.put(2, "Sin Stock");
         this.estadosProductos.put(3, "Pedido");
@@ -273,7 +274,7 @@ public class ControladorVentas implements iControladorVentas {
     }
     
     @Override
-    public boolean eliminarProveedor(long id) {
+    public boolean eliminarProveedor(Long id) {
         try {
             return per.eliminar(per.getObjeto(id, proveedor.class));
         } catch (Exception e) {
@@ -284,7 +285,7 @@ public class ControladorVentas implements iControladorVentas {
     }
     
     @Override
-    public boolean agregarProductoAProveedor(producto p, long idProveedor) {
+    public boolean agregarProductoAProveedor(producto p, Long idProveedor) {
         if (per.existe(p)) {
             if (per.getObjeto(idProveedor, proveedor.class) != null) {
                 proveedor prov = (proveedor) per.getObjeto(idProveedor, proveedor.class);
@@ -296,7 +297,7 @@ public class ControladorVentas implements iControladorVentas {
     
     @Override
     public List getProveedores() {
-        List<Object> listaObjetos = per.getListaObjetos("select * from proveedores", proveedor.class);
+        List<Object> listaObjetos = per.getListaObjetos("select * from proveedor", proveedor.class);
         List<proveedor> proveedores = new ArrayList<>();
         for (Object obj : listaObjetos) {
             proveedores.add((proveedor) obj);
@@ -305,12 +306,12 @@ public class ControladorVentas implements iControladorVentas {
     }
     
     @Override
-    public proveedor getProveedor(long id) {
+    public proveedor getProveedor(Long id) {
         return (proveedor) per.getObjeto(id, proveedor.class);
     }
     
     @Override
-    public boolean agregarProductosAProveedor(long idProveedor, List<producto> productosAgregar) {
+    public boolean agregarProductosAProveedor(Long idProveedor, List<producto> productosAgregar) {
         if (per.getObjeto(idProveedor, proveedor.class) != null) {
             proveedor p = (proveedor) per.getObjeto(idProveedor, proveedor.class);
             return p.addAllProductos(productos);
@@ -333,7 +334,7 @@ public class ControladorVentas implements iControladorVentas {
     }
     
     @Override
-    public producto getProducto(long id) {
+    public producto getProducto(Long id) {
         return (producto) per.getObjeto(id, producto.class);
     }
     
@@ -368,9 +369,9 @@ public class ControladorVentas implements iControladorVentas {
     }
     
     @Override
-    public List<producto> getProductosXproveedor(long id) {
+    public List<producto> getProductosXproveedor(Long id) {
         //revisar campor id_proveedor
-        List<Object> listaObjetos = per.getListaObjetos("select * from producto where id_proveedor= " + id + " ", producto.class);
+        List<Object> listaObjetos = per.getListaObjetos("select * from producto where proveedor_id= " + id + " ", producto.class);
         List<producto> prods = new ArrayList<>();
         for (Object obj : listaObjetos) {
             prods.add((producto) obj);

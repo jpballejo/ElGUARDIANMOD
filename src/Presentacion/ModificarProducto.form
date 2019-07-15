@@ -64,8 +64,8 @@
                   </Group>
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btn_foto" alignment="0" pref="218" max="32767" attributes="0"/>
-                      <Component id="lb_foto" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btn_foto" pref="218" max="32767" attributes="0"/>
+                      <Component id="lb_foto" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

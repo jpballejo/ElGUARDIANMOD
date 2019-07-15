@@ -43,14 +43,15 @@ import javax.swing.*;
  * @author jp
  */
 public final class Principal extends javax.swing.JFrame {
-
+    
     private utilidades util = utilidades.getInstance();
     private EntityManager eM;
     String cuerpo = "coso", asunto = "cospe";
-    iControladorCliente ICC = fabricaElGuardian.getInstance().getInstanceIControladorCliente();
+   iControladorCliente ICC = fabricaElGuardian.getInstance().getInstanceIControladorCliente();
     iControladorVentas ICV = fabricaElGuardian.getInstance().getInstanceIControladorVentas();
     iControladorServicios ICS = fabricaElGuardian.getInstance().getInstanceIControladorServicios();
     iControladorReservas ICR = fabricaElGuardian.getInstance().getInstanceIControladorReservas();
+  //  ControladorReservas iCR = ControladorReservas.getInstance();
     fabricaElGuardian fabrica = fabricaElGuardian.getInstance();
     private Long idReserva;
 
@@ -60,7 +61,7 @@ public final class Principal extends javax.swing.JFrame {
     public Principal() throws AddressException, UnsupportedLookAndFeelException {
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-
+            
             try {
                 UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
@@ -72,7 +73,9 @@ public final class Principal extends javax.swing.JFrame {
         int lines = 2;
         jTableReservas.setRowHeight(jTableReservas.getRowHeight() * lines);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
+          if(ICS.getPrecioPaseo() == 0){
+         ICS.crearPaseo();
+     }
     }
 
     /**
@@ -109,6 +112,11 @@ public final class Principal extends javax.swing.JFrame {
         jMenuIAltaVenta = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
+        btn_galeria = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        btn_proveedores = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        btn_correo = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -317,7 +325,39 @@ public final class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem3);
 
+        btn_galeria.setText("Galeria");
+        btn_galeria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_galeriaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(btn_galeria);
+
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Proveedores");
+
+        btn_proveedores.setText("Proveedores");
+        btn_proveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_proveedoresActionPerformed(evt);
+            }
+        });
+        jMenu2.add(btn_proveedores);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Correo");
+
+        btn_correo.setText("Enviar Correo");
+        btn_correo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_correoActionPerformed(evt);
+            }
+        });
+        jMenu3.add(btn_correo);
+
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -347,7 +387,7 @@ public final class Principal extends javax.swing.JFrame {
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = altaCliente.getSize();
         altaCliente.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         altaCliente.setVisible(true);
 
         // TODO add your handling code here:
@@ -356,22 +396,22 @@ public final class Principal extends javax.swing.JFrame {
     private void jMenConfRazaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenConfRazaActionPerformed
         JIF_raza raza = new JIF_raza(escritorioPrincipal);
         this.escritorioPrincipal.add(raza);
-
+        
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = raza.getSize();
         raza.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         raza.setVisible(true);
     }//GEN-LAST:event_jMenConfRazaActionPerformed
 
     private void jMenConfTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenConfTurnoActionPerformed
         JIF_turnos turno = new JIF_turnos();
         this.escritorioPrincipal.add(turno);
-
+        
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = turno.getSize();
         turno.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         turno.setVisible(true);
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenConfTurnoActionPerformed
@@ -380,11 +420,11 @@ public final class Principal extends javax.swing.JFrame {
         JIF_animal animal;
         animal = new JIF_animal(escritorioPrincipal);
         this.escritorioPrincipal.add(animal);
-
+        
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = animal.getSize();
         animal.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         animal.setVisible(true);
 
         // TODO add your handling code here:
@@ -393,35 +433,35 @@ public final class Principal extends javax.swing.JFrame {
     private void btn_reservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_reservarActionPerformed
         JIF_reservarTurno reservaTurno = new JIF_reservarTurno(escritorioPrincipal);
         this.escritorioPrincipal.add(reservaTurno);
-
+        
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = reservaTurno.getSize();
         reservaTurno.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         reservaTurno.setVisible(true);
     }//GEN-LAST:event_btn_reservarActionPerformed
 
     private void jMenItem_banioEsquilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenItem_banioEsquilaActionPerformed
         JIF_esquilaBaño banioEsquila = new JIF_esquilaBaño(this.escritorioPrincipal);
         this.escritorioPrincipal.add(banioEsquila);
-
+        
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = banioEsquila.getSize();
         banioEsquila.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         banioEsquila.setVisible(true);
 // TODO add your handling code here:
     }//GEN-LAST:event_jMenItem_banioEsquilaActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-
+        
         AltaProducto altaP = new AltaProducto(escritorioPrincipal);
         this.escritorioPrincipal.add(altaP);
-
+        
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = altaP.getSize();
         altaP.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         altaP.setVisible(true);       // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -431,18 +471,18 @@ public final class Principal extends javax.swing.JFrame {
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = altv.getSize();
         altv.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         altv.setVisible(true);       // TODO add your handling code here:
     }//GEN-LAST:event_jMenuIAltaVentaActionPerformed
 
     private void jMenuListarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuListarProductosActionPerformed
         ListarProductos lsProd = new ListarProductos(this.escritorioPrincipal);
         this.escritorioPrincipal.add(lsProd);
-
+        
         Dimension desktopSize = escritorioPrincipal.getSize();
         Dimension FrameSize = lsProd.getSize();
         lsProd.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+        
         lsProd.setVisible(true);
 // TODO add your handling code here:
     }//GEN-LAST:event_jMenuListarProductosActionPerformed
@@ -452,11 +492,11 @@ public final class Principal extends javax.swing.JFrame {
             if (JOptionPane.showConfirmDialog(this, "Desea modificar la reserva?") == 0) {
                 JIF_modificarReserva nuevoModificarReserva = new JIF_modificarReserva(this.escritorioPrincipal, this.idReserva);
                 escritorioPrincipal.add(nuevoModificarReserva);
-
+                
                 Dimension desktopSize = escritorioPrincipal.getSize();
                 Dimension FrameSize = nuevoModificarReserva.getSize();
                 nuevoModificarReserva.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-
+                
                 nuevoModificarReserva.setVisible(true);
             }
         }
@@ -481,7 +521,7 @@ public final class Principal extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo eliminar la reserva!");
                 }
-
+                
             }
         }
 
@@ -489,7 +529,7 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_eliminarReservaActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-
+        
         NuevaImagen nv = new NuevaImagen();
         this.escritorioPrincipal.add(nv);
         Dimension desktopSize = escritorioPrincipal.getSize();
@@ -501,13 +541,45 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-     JIF_configuracion configuracion = new JIF_configuracion();
-     this.escritorioPrincipal.add(configuracion);
-     Dimension desktopSize = escritorioPrincipal.getSize();
-     Dimension FrameSize = configuracion.getSize();
-     configuracion.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
-     configuracion.setVisible(true);
+        JIF_configuracion configuracion = new JIF_configuracion();
+        this.escritorioPrincipal.add(configuracion);
+        Dimension desktopSize = escritorioPrincipal.getSize();
+        Dimension FrameSize = configuracion.getSize();
+        configuracion.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        configuracion.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void btn_galeriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_galeriaActionPerformed
+        JIF_galeria gal = new JIF_galeria(escritorioPrincipal);
+        this.escritorioPrincipal.add(gal);
+        
+        Dimension desktopSize = escritorioPrincipal.getSize();
+        Dimension FrameSize = gal.getSize();
+        gal.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        //m.show();
+
+        gal.setVisible(true);                   // TODO add your handling code here:
+    }//GEN-LAST:event_btn_galeriaActionPerformed
+
+    private void btn_proveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_proveedoresActionPerformed
+        JIF_proveedor provForm = new JIF_proveedor(this.escritorioPrincipal);
+        this.escritorioPrincipal.add(provForm);
+        Dimension desktopSize = escritorioPrincipal.getSize();
+        Dimension FrameSize = provForm.getSize();
+        provForm.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        provForm.setVisible(true);
+// TODO add your handling code here:
+    }//GEN-LAST:event_btn_proveedoresActionPerformed
+
+    private void btn_correoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_correoActionPerformed
+        JIF_enviarCorreo enviarEmail = new JIF_enviarCorreo(null,null);
+        this.escritorioPrincipal.add(enviarEmail);
+        Dimension desktopSize = escritorioPrincipal.getSize();
+        Dimension FrameSize = enviarEmail.getSize();
+        enviarEmail.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+        enviarEmail.setVisible(true);
+// TODO add your handling code here:
+    }//GEN-LAST:event_btn_correoActionPerformed
 
     /* public static void main(String args[]) throws InterruptedException {
 
@@ -559,12 +631,12 @@ public final class Principal extends javax.swing.JFrame {
     }
      */
     public static void main(String args[]) {
-
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
                     new Principal().setVisible(true);
-
+                    
                 } catch (UnsupportedLookAndFeelException ex) {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (AddressException ex) {
@@ -576,8 +648,11 @@ public final class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu JM_Configuracion;
+    private javax.swing.JMenuItem btn_correo;
     private javax.swing.JButton btn_eliminarReserva;
+    private javax.swing.JMenuItem btn_galeria;
     private javax.swing.JButton btn_modReserva;
+    private javax.swing.JMenuItem btn_proveedores;
     private javax.swing.JButton btn_reservar;
     private javax.swing.JDesktopPane escritorioPrincipal;
     private javax.swing.JMenu jM_animal;
@@ -587,6 +662,8 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenConfTurno;
     private javax.swing.JMenuItem jMenItem_banioEsquila;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuIAltaVenta;
     private javax.swing.JMenuItem jMenuItem1;
@@ -605,7 +682,7 @@ public final class Principal extends javax.swing.JFrame {
     public JDesktopPane getEscritorioPrincipal() {
         return escritorioPrincipal;
     }
-
+    
     public void setEscritorioPrincipal(JDesktopPane escritorioPrincipal) {
         this.escritorioPrincipal = escritorioPrincipal;
     }
@@ -632,7 +709,7 @@ public final class Principal extends javax.swing.JFrame {
         WSContServicios WSCS = new WSContServicios(URL);
         WSCS.publicar();*/
     }
-
+    
     private void cargarInicio() {
         fabrica.cargarInicio();
         
@@ -642,14 +719,14 @@ public final class Principal extends javax.swing.JFrame {
         hiloHijo hhijo = new hiloHijo();
         hhijo.setTablaParaLLenar(this.jTableReservas);
         m.agregarHilo("h1", hhijo);
-
+        
     }
-
+    
     public void cargarModelo(DefaultTableModel model) {
         jTableReservas.setModel(model);
-
+        
     }
-
+    
     private void cargarReservas() {
         try {
             List<reserva> reservasDelDia = (List<reserva>) ICR.getReservasDelDia();
@@ -662,7 +739,7 @@ public final class Principal extends javax.swing.JFrame {
                 }
                 //jTableReservas.setEnabled(true);
                 this.jTableReservas.setModel(dtm);
-
+                
             } else {
                 //  jTableReservas.setModel(new DefaultTableModel(0, 0));
                 this.jTableReservas.setEnabled(false);
@@ -671,17 +748,17 @@ public final class Principal extends javax.swing.JFrame {
             System.err.println(e.getMessage());
         }
     }
-
+    
     public static void iniciarSplashScreen() throws InterruptedException {
-
+        
         int width = 556;
         int height = 650;
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - width) / 2;
         int y = (screen.height - height) / 2;
-
+        
         SplashScreen sp = new SplashScreen();
-
+        
         sp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Already there
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         //sp.setUndecorated(true);
@@ -693,13 +770,13 @@ public final class Principal extends javax.swing.JFrame {
             sp.setVisible(true);
             sp.Cargando.setText("Cargando.." + i);
             sp.Carg.setValue(i);
-
+            
             if (i == 99) {
                 sp.dispose();
             }
-
+            
         }
-
+        
     }
-
+    
 }

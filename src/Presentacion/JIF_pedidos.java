@@ -31,6 +31,7 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
     JDesktopPane escritorio = null;
     private Long idProveedor = null;
     private List<Long> idsProductos = new ArrayList<>();
+    private Long idproductoTablaPedido = null;
 
     /**
      * Creates new form JIF_pedidos
@@ -65,6 +66,7 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         btn_pedir = new javax.swing.JButton();
         btn_cancelar = new javax.swing.JButton();
+        btn_quitar = new javax.swing.JButton();
 
         jtablaProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -123,6 +125,11 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
                 "ID Producto", "Nombre ", "Cantidad"
             }
         ));
+        jtableProductosAPedir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtableProductosAPedirMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jtableProductosAPedir);
         if (jtableProductosAPedir.getColumnModel().getColumnCount() > 0) {
             jtableProductosAPedir.getColumnModel().getColumn(2).setResizable(false);
@@ -143,7 +150,7 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel4.setText(">>");
 
-        btn_pedir.setText("Realizar Pedidp");
+        btn_pedir.setText("Realizar Pedido");
         btn_pedir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_pedirActionPerformed(evt);
@@ -154,6 +161,13 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
         btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cancelarActionPerformed(evt);
+            }
+        });
+
+        btn_quitar.setText("Quitar");
+        btn_quitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_quitarActionPerformed(evt);
             }
         });
 
@@ -173,17 +187,27 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                                .addComponent(jLabel3)
+                                .addContainerGap(278, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(btn_quitar)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_pedir)
                         .addGap(35, 35, 35)
-                        .addComponent(btn_cancelar))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                        .addComponent(btn_cancelar)
+                        .addGap(26, 26, 26))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,8 +233,10 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_quitar))
+                        .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_pedir)
                             .addComponent(btn_cancelar))
@@ -235,8 +261,9 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
         int rowAtPoint = jtablaProveedores.rowAtPoint(evt.getPoint()); // TODO add your handling code here:
         this.idProveedor = (Long) jtablaProveedores.getValueAt(rowAtPoint, 0);
         lb_proveedor.setText(String.valueOf(this.idProveedor));
-        cargarProductos(this.idProveedor);
         reiniciarTablas();
+        cargarProductos(this.idProveedor);
+
     }//GEN-LAST:event_jtablaProveedoresMouseClicked
 
     private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
@@ -259,10 +286,22 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btn_pedirActionPerformed
 
+    private void jtableProductosAPedirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtableProductosAPedirMouseClicked
+        int row = jtableProductosAPedir.rowAtPoint(evt.getPoint());
+        this.idproductoTablaPedido = (Long) this.jtableProductosAPedir.getValueAt(row, 0);
+        //  eliminarItemLista();
+// TODO add your handling code here:
+    }//GEN-LAST:event_jtableProductosAPedirMouseClicked
+
+    private void btn_quitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_quitarActionPerformed
+        eliminarItemLista();        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_quitarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_cancelar;
     private javax.swing.JButton btn_pedir;
+    private javax.swing.JButton btn_quitar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -337,7 +376,8 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
         Vector dataVector = modeloT.getDataVector();
         if (dataVector.size() > 0) {
             for (Object v : dataVector) {
-                int cant = (Integer) ((Vector) v).elementAt(2);
+                String valor = (String) ((Vector) v).elementAt(2);
+               int cant=Integer.parseInt(valor);
                 if (cant <= 0) {
                     return false;
                 }
@@ -366,8 +406,8 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
             String cuerpo = armarPedido();
             String correo = contV.getProveedor(this.idProveedor).getCorreo();
             contV.setearEstadoProductos(idsProductos, 3);
-            JIF_enviarCorreo nuevoCorreo = new JIF_enviarCorreo();
-            nuevoCorreo.recibePedido(cuerpo, correo);
+            JIF_enviarCorreo nuevoCorreo = new JIF_enviarCorreo(cuerpo, correo);
+        //    nuevoCorreo.recibePedido(cuerpo, correo);
             this.escritorio.add(nuevoCorreo);
             nuevoCorreo.setVisible(true);
             limpiar();
@@ -384,4 +424,41 @@ public class JIF_pedidos extends javax.swing.JInternalFrame {
         this.idProveedor = null;
     }
 
+    private void eliminarItemLista() {
+        if (idproductoTablaPedido != null) {
+            if (JOptionPane.showConfirmDialog(this, "Desea remover el producto: " + idproductoTablaPedido.toString() + " de la lista de compra?") == 0) {
+                int fila = getPosicionProdLista(idproductoTablaPedido);
+                eliminarFila(fila);
+                //  this.productosEnVenta.remove(idProductoListaVenta);
+                JOptionPane.showMessageDialog(this, "Se elimino de la lista!");
+                //  calcularPrecioTotal();
+                idproductoTablaPedido = null;
+            } else {
+                idproductoTablaPedido = null;
+            }
+        }
+    }
+
+    private int getPosicionProdLista(long id) {
+        DefaultTableModel modeloSet = (DefaultTableModel) jtableProductosAPedir.getModel();
+        Vector dataVector = modeloSet.getDataVector();
+        for (int i = 0; i < dataVector.size(); i++) {
+            Vector elementoVector = (Vector) dataVector.elementAt(i);
+            if (estaEnEstaPosicion(elementoVector, id)) {
+                return i;
+            }
+
+        }
+        return 0;
+    }
+
+    private void eliminarFila(int indice) {
+        DefaultTableModel modeloMod = (DefaultTableModel) jtableProductosAPedir.getModel();
+        modeloMod.removeRow(indice);
+
+    }
+
+    private boolean estaEnEstaPosicion(Vector elementoVector, long id) {
+        return ((Long) elementoVector.elementAt(0)).equals(id);
+    }
 }

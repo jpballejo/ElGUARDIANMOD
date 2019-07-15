@@ -122,9 +122,8 @@ public class controladorServicios implements iControladorServicios {
     @Override
     public void crearPaseo() {
         try {
-            if (per.ejecutarSql("CREATE TABLE precioPaseo (id int NOT NULL AUTO_INCREMENT,precio float, PRIMARY KEY (id))")) {
-                per.ejecutarSql("INSERT INTO precioPaseo (precio) values (precio = 200)");
-            }
+            per.ejecutarSql("CREATE TABLE precioPaseo (id int NOT NULL AUTO_INCREMENT,precio float, PRIMARY KEY (id))");
+            per.ejecutarSql("INSERT INTO precioPaseo (precio) values (200)");
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -134,7 +133,7 @@ public class controladorServicios implements iControladorServicios {
     @Override
     public boolean setPrecioPaseo(float precio) {
         try {
-            return per.ejecutarSql("UPDATE preciopaseo set precio=" + precio + "' where id=1");
+            return per.ejecutarSql("UPDATE precioPaseo set precio=" + precio + "where id=1");
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

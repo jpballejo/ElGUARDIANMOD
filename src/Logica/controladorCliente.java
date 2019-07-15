@@ -42,11 +42,14 @@ public class controladorCliente implements iControladorCliente {
     String ruta = System.getProperty("user.dir");
     String rutaFoto = ruta + "/ImagenesMascotas/";
     String ruta2 = Paths.get(ruta).getParent().getParent().toString();
-    String rutaDestino = ruta2 + "/GuardianWeb/GuardianWeb/web/img/ImagenMascota/";
+    String rutaDestino = ruta2 + "/GuardianWeb/web/img/ImagenMascota/";
+    String rutaFotoGaleria = ruta + "/ImagenesGaleria/";
+    String rutaFotoGaleriaWeb = ruta2 + "/GuardianWeb/web/img/galeria/";
 
     ////////////Arreglos////////////////
     private HashMap<String, cliente> clientes = new HashMap<>();
     private List<mascota> mascotas = new ArrayList<>();
+    private List<Imagenes> imagenesGal = new ArrayList<>();
 
     public static controladorCliente getInstance() {
         if (instance == null) {
@@ -710,4 +713,75 @@ public class controladorCliente implements iControladorCliente {
         }
     }
 
+    @Override
+    public void setRutaFotoImagenesGaleriaLevantar(String ruta) {
+        this.rutaFotoGaleria = ruta;
+    }
+
+    @Override
+    public String getRutaFotoImagenesGaleriaLevantar() {
+        return this.rutaFotoGaleria;
+    }
+
+    @Override
+    public boolean EliminarFotoGaleria(String nombreFoto) {
+        Imagenes img = null;
+        for (int i = 0; i < imagenesGal.size(); i++) {
+
+            if (imagenesGal.get(i).getNombre().compareTo(nombreFoto) == 0) {
+                img = imagenesGal.get(i);
+            }
+        }
+
+        imagenesGal.remove(img);
+        persistencia.eliminar(img);
+        eliminarFoto(getRutaFotoImagenesGaleriaLevantar() + nombreFoto);
+        eliminarFoto(rutaFotoGaleriaWeb + nombreFoto);
+        return true;
+
+    }
+
+    @Override
+    public List<Imagenes> getListaImagenesGaleria() {
+
+        return this.imagenesGal;
+
+    }
+
+    @Override
+    public void setListaImagenesGaleria(List<Imagenes> imagenes) {
+
+        this.imagenesGal = imagenes;
+
+    }
+
+    @Override
+    public void cargarListaImagenesGaleriaBD() {
+
+        this.imagenesGal = persistencia.ObtenerListaImagenesBD();
+
+    }
+
+    @Override
+    public boolean modificarFoto(Imagenes foto, String nombreAnterior) {
+
+        File imageFile1 = new File(getRutaFotoImagenesGaleriaLevantar(), nombreAnterior);
+        File imageFile11 = new File(getRutaFotoImagenesGaleriaLevantar(), foto.getNombre());
+        imageFile1.renameTo(imageFile11);
+
+        File imageFile2 = new File(rutaFotoGaleriaWeb, nombreAnterior);
+        File imageFile22 = new File(rutaFotoGaleriaWeb, foto.getNombre());
+        imageFile2.renameTo(imageFile22);
+
+        return persistencia.modificar(foto);
+
+    }
+
+    @Override
+    public boolean nuevaFoto(Imagenes foto) {
+
+        this.imagenesGal.add(foto);
+        return persistencia.persis(foto);
+
+    }
 }

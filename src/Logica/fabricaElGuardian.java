@@ -74,6 +74,7 @@ public class fabricaElGuardian {
             utilidades.setPassword(iCP.getContraseña());
             levantarWebServices();
             iCV.cargarproductos();
+            iCC.cargarListaImagenesGaleriaBD();
             return true;
         }
 

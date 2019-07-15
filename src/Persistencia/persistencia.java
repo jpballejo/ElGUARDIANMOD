@@ -5,6 +5,7 @@
  */
 package Persistencia;
 
+import Logica.Imagenes;
 import Logica.fabricaElGuardian;
 import Logica.iControladorReservas;
 import java.util.List;
@@ -65,19 +66,21 @@ public class persistencia {
         try {
 
             System.out.println("Metodo persis inicio");
-            em.getTransaction().begin();
-            em.persist(obj);
-            em.getTransaction().commit();
-            System.out.println("Agrege: " + obj.getClass().getName());
-            System.out.println("Metodo persis fin");
-            return true;
+            if (!existe(obj)) {
+                em.getTransaction().begin();
+                em.persist(obj);
+                em.getTransaction().commit();
+                System.out.println("Agrege: " + obj.getClass().getName());
+                System.out.println("Metodo persis fin");
+                return true;
+            }
 
         } catch (Exception e) {
             System.err.println("Error al agregar: " + e.getMessage() + " Causa: " + e.getCause());
             em.getTransaction().rollback();
             return false;
         }
-
+        return false;
     }
 
     public boolean modificar(Object obj) {
@@ -205,6 +208,19 @@ public class persistencia {
         return obj;
 
     }
-    
-    
+
+    public List<Imagenes> ObtenerListaImagenesBD() {
+        List<Imagenes> res = null;
+
+        try {
+            em.getTransaction().begin();
+            res = em.createNativeQuery("SELECT * from Imagenes ORDER BY indice", Imagenes.class).getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.err.println("Error ObtenerListaImagenesBD: Mensaje: " + e.getMessage() + "Causa: " + e.getCause());
+            em.getTransaction().rollback();
+        }
+        return res;
+    }
+
 }

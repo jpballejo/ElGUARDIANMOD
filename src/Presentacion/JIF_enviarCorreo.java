@@ -24,7 +24,9 @@ public class JIF_enviarCorreo extends javax.swing.JInternalFrame {
     /**
      * Creates new form JIF_enviarCorreo
      */
-    public JIF_enviarCorreo() {
+    public JIF_enviarCorreo(String cuerpo,String correo) {
+        this.correo=correo;
+        this.cuerpo=cuerpo;
         initComponents();
         validaInicio();
     }
@@ -208,7 +210,7 @@ public class JIF_enviarCorreo extends javax.swing.JInternalFrame {
 
             if (util.emailValido(jtxt_Destinatario.getText())) {
                 try {
-                    if (utilidades.enviarConGMail(jtxt_Destinatario.getText(), jtxt_asunto.getText(), cuerpo, null, null)) {
+                    if (utilidades.enviarConGMail(jtxt_Destinatario.getText(), jtxt_asunto.getText(), jtxt_cuerpo.getText(), null, null)) {
                         JOptionPane.showMessageDialog(this, "Se envio el correo!");
 
                         limpiar();

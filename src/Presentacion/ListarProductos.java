@@ -31,12 +31,12 @@ import javax.swing.table.TableModel;
  * @author PabloP
  */
 public class ListarProductos extends javax.swing.JInternalFrame {
-    
+
     private static iControladorVentas iCV = fabricaElGuardian.getInstance().getInstanceIControladorVentas();
     private static JDesktopPane escritorio = null;
     //ModificarProducto modProd = new ModificarProducto();
     utilidades util = utilidades.getInstance();
-    private long idProdTS = 0, idProdTSS = 0, idProdTP = 0;
+    private Long idProdTS = null, idProdTSS = null, idProdTP = null;
     private proveedor prov = null;
     private String correoProv;
     private producto prod = null;
@@ -711,18 +711,20 @@ public class ListarProductos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_nuevoSActionPerformed
 
     private void btn_modidicarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_modidicarSActionPerformed
-        if (this.idProdTS != 0) {
+        if (this.idProdTS != null) {
             modificarProducto(this.idProdTS);
         } else {
-            this.idProdTS = 0;
+            this.idProdTS = null;
         }
     }//GEN-LAST:event_btn_modidicarSActionPerformed
 
     private void btn_eliminarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarSActionPerformed
-        if (this.idProdTS != 0) {
+        if (this.idProdTS != null) {
             if (JOptionPane.showConfirmDialog(this, "Desea eliminar el producto: " + this.idProdTS) == 0) {
                 eliminarProducto(idProdTS);
-                
+
+            } else {
+                this.idProdTS = null;
             }
         }
     }//GEN-LAST:event_btn_eliminarSActionPerformed
@@ -736,18 +738,20 @@ public class ListarProductos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_pedirActionPerformed
 
     private void btn_modificarSSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_modificarSSActionPerformed
-        if (this.idProdTSS != 0) {
+        if (this.idProdTSS != null) {
             modificarProducto(this.idProdTSS);
         } else {
-            this.idProdTSS = 0;
+            this.idProdTSS = null;
         }     // TODO add your handling code here:
     }//GEN-LAST:event_btn_modificarSSActionPerformed
 
     private void btn_eliminarSSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarSSActionPerformed
-        if (this.idProdTSS != 0) {
+        if (this.idProdTSS != null) {
             if (JOptionPane.showConfirmDialog(this, "Desea eliminar el producto: " + this.idProdTSS) == 0) {
                 eliminarProducto(idProdTSS);
-                
+
+            } else {
+                this.idProdTSS = null;
             }
         }
     }//GEN-LAST:event_btn_eliminarSSActionPerformed
@@ -812,13 +816,14 @@ public class ListarProductos extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setearNuevoStock();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     public void cargarTablas() {
         cargarTablaEnStock();
         cargarTablaSinStock();
         cargarTablaProdC();
-        cargarTablaProdRP();
         reiniciarTablaProdRecibidos();
+        cargarTablaProdRP();
+
     }
 
 
@@ -894,41 +899,43 @@ public class ListarProductos extends javax.swing.JInternalFrame {
             altProd.setVisible(true);
         }
     }
-    
+
     private void modificarProducto(long id) {
-        ModificarProducto modProd = new ModificarProducto(this.escritorio, id);
-        this.escritorio.add(modProd);
-        modProd.setVisible(true);
+        if (JOptionPane.showConfirmDialog(this, "Desea modificar el producto: " + id) == 0) {
+            ModificarProducto modProd = new ModificarProducto(this.escritorio, id);
+            this.escritorio.add(modProd);
+            modProd.setVisible(true);
+        }
     }
-    
+
     private void eliminarProducto(long id) {
-        
+
         if (iCV.EliminarProducto(id)) {
             JOptionPane.showMessageDialog(this, "Se elimino el producto: " + id);
             cargarTablas();
         }
-        
+
     }
-    
+
     private void pedir() {
         if (JOptionPane.showConfirmDialog(this, "Desea realizar un pedido?") == 0) {
             JIF_pedidos pedidos = new JIF_pedidos(this.escritorio);
             this.escritorio.add(pedidos);
             pedidos.setVisible(true);
-            
+
         }
     }
-    
+
     private void contactar() {
         if (this.correoProv != null) {
-            JIF_enviarCorreo enviarCorreo = new JIF_enviarCorreo();
-            enviarCorreo.recibeCorreo(this.correoProv);
+            JIF_enviarCorreo enviarCorreo = new JIF_enviarCorreo(null, correoProv);
+            //   enviarCorreo.recibeCorreo(this.correoProv);
             this.escritorio.add(enviarCorreo);
             enviarCorreo.setVisible(true);
         }
-        
+
     }
-    
+
     private void cargarTablaEnStock() {
         List<producto> productos = (List<producto>) iCV.getProductosDisponibles();
         if (productos.size() > 0) {
@@ -944,7 +951,7 @@ public class ListarProductos extends javax.swing.JInternalFrame {
             jtablaProdS.setEnabled(false);
         }
     }
-    
+
     private void cargarTablaSinStock() {
         List<producto> productos = (List<producto>) iCV.getProductosAgotados();
         if (productos.size() > 0) {
@@ -960,7 +967,7 @@ public class ListarProductos extends javax.swing.JInternalFrame {
             jtablaProdSS.setEnabled(false);
         }
     }
-    
+
     private void cargarTablaProdC() {
         List<producto> productos = (List<producto>) iCV.getProductosTotales();
         if (productos.size() > 0) {
@@ -976,7 +983,7 @@ public class ListarProductos extends javax.swing.JInternalFrame {
             jtablaProdP.setEnabled(false);
         }
     }
-    
+
     private void cargarTablaProdRP() {
         List<producto> productos = (List<producto>) iCV.getProductosTotales();
         if (productos.size() > 0) {
@@ -992,13 +999,14 @@ public class ListarProductos extends javax.swing.JInternalFrame {
             jtabla_productoRP.setEnabled(false);
         }
     }
-    
+
     private void reiniciarTablaProdRecibidos() {
         String[] cabeceras = {"Id Producto", "Nombre", "cantidad"};
         DefaultTableModel modeloN = new DefaultTableModel(cabeceras, 0);
         jtabla_productoRP.setModel(modeloN);
     }
     
+
     private void cargarDatosProducto() {
         if (this.idProdTP != 0) {
             this.prod = (producto) iCV.getProducto(this.idProdTP);
@@ -1015,17 +1023,17 @@ public class ListarProductos extends javax.swing.JInternalFrame {
             lb_telCel.setText(this.prov.getNumeroTelCel());
         }
     }
-    
+
     private void seleccionarProducto(Long aLong) {
         producto p = iCV.getProducto(aLong);
         if (p != null) {
             DefaultTableModel modeloSet = (DefaultTableModel) jtabla_productosRecibidos.getModel();
             Object[] data = {p.getCodigo(), p.getNombre()};
             modeloSet.addRow(data);
-            
+
         }
     }
-    
+
     private int getPosicionProdLista(long id) {
         DefaultTableModel modeloSet = (DefaultTableModel) jtabla_productosRecibidos.getModel();
         Vector dataVector = modeloSet.getDataVector();
@@ -1034,21 +1042,21 @@ public class ListarProductos extends javax.swing.JInternalFrame {
             if (estaEnEstaPosicion(elementoVector, id)) {
                 return i;
             }
-            
+
         }
         return 0;
     }
-    
+
     private void eliminarFila(int indice) {
         DefaultTableModel modeloMod = (DefaultTableModel) jtabla_productosRecibidos.getModel();
         modeloMod.removeRow(indice);
-        
+
     }
-    
+
     private boolean estaEnEstaPosicion(Vector elementoVector, long id) {
         return ((Long) elementoVector.elementAt(0)).equals(id);
     }
-    
+
     private boolean validarCantidades() {
         DefaultTableModel modelo = (DefaultTableModel) jtabla_productoRP.getModel();
         Vector datosVector = modelo.getDataVector();
@@ -1063,7 +1071,7 @@ public class ListarProductos extends javax.swing.JInternalFrame {
         }
         return true;
     }
-    
+
     private HashMap armarDiccionarioConCantidades() {
         HashMap<Long, Integer> cantidadNuevaProd = new HashMap<>();
         DefaultTableModel modelo = (DefaultTableModel) jtabla_productosRecibidos.getModel();
@@ -1075,7 +1083,7 @@ public class ListarProductos extends javax.swing.JInternalFrame {
         }
         return cantidadNuevaProd;
     }
-    
+
     private void setearNuevoStock() {
         if (JOptionPane.showConfirmDialog(this, "Desea agregar las nuevas cantidades al stock actual?") == 0) {
             if (validarCantidades()) {
@@ -1083,18 +1091,18 @@ public class ListarProductos extends javax.swing.JInternalFrame {
                 if (iCV.setearNuevaCantidadAlStockActual(cantidadesN)) {
                     JOptionPane.showMessageDialog(this, "Se actualizo el Stock actual de productos!");
                     limpiarRecibidos();
-                    
+
                 } else {
                     JOptionPane.showMessageDialog(this, "Ocurrio un error al tratar de modificar el Stock!");
                 }
             }
-            
+
         }
     }
-    
+
     private void limpiarRecibidos() {
         cargarTablas();
         this.idproductoRecibido = null;
-        
+
     }
 }

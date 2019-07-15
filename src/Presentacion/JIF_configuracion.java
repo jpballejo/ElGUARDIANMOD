@@ -28,11 +28,12 @@ import javax.swing.JOptionPane;
  */
 public class JIF_configuracion extends javax.swing.JInternalFrame {
 
-    private JFileChooser jF;
+    private JFileChooser jF = new JFileChooser();
     ControladorProperties contProp = ControladorProperties.getInstance();
     HashMap<String, String> diccionarioPropiedades = new HashMap<>();
     utilidades util = utilidades.getInstance();
     fabricaElGuardian fabrica = fabricaElGuardian.getInstance();
+
     public HashMap<String, String> getDiccionarioPropiedades() {
         return diccionarioPropiedades;
     }
@@ -417,8 +418,6 @@ public class JIF_configuracion extends javax.swing.JInternalFrame {
         }
         return retorno;
     }
-
-    
 
     private boolean verficaCambio(String key, String value) {
         System.out.println("verificaCambio...");

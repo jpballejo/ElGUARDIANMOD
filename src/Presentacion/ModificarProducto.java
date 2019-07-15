@@ -52,6 +52,7 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
     
     public ModificarProducto(JDesktopPane escritorioV, long idProducto) {
         this.escritorio = escritorioV;
+        this.idProducto=idProducto;
         initComponents();
         cargarProveedores();
         controlJDATE();
@@ -329,7 +330,7 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
         } else {
             nuevoCombo.addItem("No hay proveedores");
         }
-        jCB_proveedores = nuevoCombo;
+        jCB_proveedores.setModel(nuevoCombo.getModel());
     }
     
     private boolean validarDatos() {
@@ -344,7 +345,7 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
             jtxt_precio.requestFocus();
             return false;
         } else {
-            if (Float.valueOf(jtxt_precio.getText()) > 0) {
+            if (Float.valueOf(jtxt_precio.getText()) < 0) {
                 JOptionPane.showMessageDialog(this, "Debe ingresar un precio valido!");
                 return false;
             }
@@ -393,7 +394,7 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
     }
     
     private void cargarProducto() {
-        this.producto = iCV.getProducto(this.idProducto);
+        this.producto = iCV.getProducto(idProducto);
         lb_nombre.setText("Nombre: " + producto.getNombre() + " Codigo: " + idProducto);
         jtxt_cantidad.setText(String.valueOf(producto.getCantidad()));
         jtxt_precio.setText(String.valueOf(producto.getPrecio()));

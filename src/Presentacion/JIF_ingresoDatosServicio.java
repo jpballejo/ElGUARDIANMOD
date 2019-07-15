@@ -265,11 +265,7 @@ public class JIF_ingresoDatosServicio extends javax.swing.JInternalFrame {
 
     private boolean continuar() {
         int res = JOptionPane.showConfirmDialog(this, "Desea agregar el nuevo tipo de servicio: " + jtxt_nombre.getText());
-        if (res == 0) {
-            return true;
-        }
-
-        return false;
+        return res == 0;
     }
 
     private void recargarpadre() {

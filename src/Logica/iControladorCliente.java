@@ -76,9 +76,9 @@ public interface iControladorCliente {
     public abstract boolean modificarClienteWS(clienteWS clienteMod);
 
     public abstract void setRutaFotoImagenesMascotaLevantar(String ruta);
-    
+
     public abstract boolean altaClienteWeb(cliente clienteNuevo);
-    
+
     public abstract List<mascota> obtenerMascotasCliente(cliente c);
 
     public abstract List<mascota> obtenerMascotas();
@@ -92,15 +92,30 @@ public interface iControladorCliente {
     public abstract boolean ModificarMascota(mascota m);
 
     public abstract boolean activarusuario(String email, String pass);
-    
+
     public abstract boolean existeMascota(String nombre, String telefono, String Cliente);
-    
-    public abstract boolean ModificarMascota2(mascota m) throws IOException ;
-    
+
+    public abstract boolean ModificarMascota2(mascota m) throws IOException;
+
     public abstract String getRutaFotoImagenesWeb();
 
-    
     public abstract void setRutaFotoImagenesWeb(String ruta);
-    
+
     public abstract List<mascota> getMascotasClienteid(String idCliente);
+
+    public abstract boolean EliminarFotoGaleria(String nombreFoto);
+
+    public abstract void setRutaFotoImagenesGaleriaLevantar(String ruta);
+
+    public abstract String getRutaFotoImagenesGaleriaLevantar();
+
+    public abstract List<Imagenes> getListaImagenesGaleria();
+
+    public abstract void setListaImagenesGaleria(List<Imagenes> imagenes);
+
+    public abstract void cargarListaImagenesGaleriaBD();
+
+    public abstract boolean modificarFoto(Imagenes foto, String nombreAnterior);
+
+    public abstract boolean nuevaFoto(Imagenes foto);
 }

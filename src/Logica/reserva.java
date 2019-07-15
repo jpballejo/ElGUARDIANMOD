@@ -46,7 +46,7 @@ public class reserva implements Serializable {
     private servicio servicio;
     
     @OneToMany
-    private List< turno> turno= new ArrayList<>();
+    private List<turno> turno= new ArrayList<>();
     
     @ManyToOne
     private cliente cliente;
@@ -129,7 +129,7 @@ public class reserva implements Serializable {
     public String toString() {
         return "Nro Reserva/" + id + "/FechaReserva/" + fechaReserva.toString() + "/Descripcion/"
                 + descripcion + "/Correa/" + correa + "/Bozal/" + bozal + "/Mascota/" + mascota.getNombre() + "/Cliente/" + cliente.getCorreo()
-                  + "/Nro de turno/" + turno.get(0).getHora()+"/Descripcion/" +servicio.getDescripcion()+ "/Precio/"+"/Tipo/" +servicio.getTipo();
+                  + "/Turno hora/" + turno.get(0).getHora()+"/Descripcion/" +servicio.getDescripcion()+ "/Precio/"+servicio.getPrecio()+"/Tipo/" +servicio.getTipo();
     }
 
     public List getTurno() {

@@ -170,7 +170,7 @@ public class AltaProducto extends javax.swing.JInternalFrame {
                         .addComponent(jdc_fechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_foto, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                    .addComponent(btn_foto, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                     .addComponent(lb_foto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -222,7 +222,9 @@ public class AltaProducto extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,7 +311,7 @@ public class AltaProducto extends javax.swing.JInternalFrame {
         } else {
             nuevoCombo.addItem("No hay proveedores");
         }
-        jCB_proveedores = nuevoCombo;
+        jCB_proveedores.setModel(nuevoCombo.getModel());
     }
     
     private boolean validarDatos() {
@@ -328,7 +330,7 @@ public class AltaProducto extends javax.swing.JInternalFrame {
             jtxt_precio.requestFocus();
             return false;
         } else {
-            if (Float.valueOf(jtxt_precio.getText()) > 0) {
+            if (Float.valueOf(jtxt_precio.getText()) < 0) {
                 JOptionPane.showMessageDialog(this, "Debe ingresar un precio valido!");
                 return false;
             }
@@ -352,7 +354,7 @@ public class AltaProducto extends javax.swing.JInternalFrame {
         if (JOptionPane.showConfirmDialog(this, "Desea dar de alta el Producto: " + jtxt_nombre.getText() + "?") == 0) {
             if (validarDatos()) {
                 producto p = new producto();
-                p.setNombre(jtxt_cantidad.getText());
+                p.setNombre(jtxt_nombre.getText());
                 p.setPrecio(Float.valueOf(jtxt_precio.getText()));
                 p.setCantidad(Integer.parseInt(jtxt_cantidad.getText()));
                 p.setProveedor(getProveedorSeleccionado());
@@ -365,7 +367,7 @@ public class AltaProducto extends javax.swing.JInternalFrame {
                 if (fotoProducto != null) {
                     util.salvarImagen(fotoProducto, ruta, generarNombreFoto(), 0);
                     util.salvarImagen(fotoProducto, rutasrv, generarNombreFoto(), 0);
-                    p.setFoto(generarNombreFoto());
+                    p.setFoto(generarNombreFoto()+".png");
                 } else {
                     p.setFoto("default");
                 }
@@ -414,11 +416,11 @@ public class AltaProducto extends javax.swing.JInternalFrame {
     
     private void controlJDATE() {
         
-        Date min = util.getFechaActual();//fecha minima
-        //Date max = utilidades.sumaRestaDias(util.getFechaActual(), 7);//fecha maxima 7 dias a partir de la actual
+        Date max = util.getFechaActual();//fecha minima
+        Date min = utilidades.sumaRestaDias(util.getFechaActual(), -30);//fecha maxima 7 dias a partir de la actual
         jdc_fechaCompra.getDateEditor().setEnabled(false);//desabilito el jtext editor
-        jdc_fechaCompra.setMaxSelectableDate(min);//seteo ma fecha maxima
-        // jdc_fechaCompra.setMinSelectableDate(min);//seteo la fecha minima
+        jdc_fechaCompra.setMaxSelectableDate(max);//seteo ma fecha maxima
+         jdc_fechaCompra.setMinSelectableDate(min);//seteo la fecha minima
         //en este evento se le pueden agregar llamadas a opciones mentodos etc que se ejecutan cuando cambia la fecha (uso la interfaz lambda)
         /* JDTFechaReserva.getDateEditor().addPropertyChangeListener((PropertyChangeEvent e) -> {
             JOptionPane.showMessageDialog(rootPane, "la fecha es " + JDTFechaReserva.getDate());

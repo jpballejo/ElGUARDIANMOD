@@ -62,19 +62,19 @@ public interface iControladorVentas {
 
     public abstract boolean modificarProveedor(proveedor p);
 
-    public abstract boolean eliminarProveedor(long id);
+    public abstract boolean eliminarProveedor(Long id);
 
-    public abstract boolean agregarProductoAProveedor(producto p, long idProveedor);
+    public abstract boolean agregarProductoAProveedor(producto p, Long idProveedor);
 
     public abstract List getProveedores();
 
-    public abstract proveedor getProveedor(long id);
+    public abstract proveedor getProveedor(Long id);
 
-    public abstract boolean agregarProductosAProveedor(long idProveedor, List<producto> productosAgregar);
+    public abstract boolean agregarProductosAProveedor(Long idProveedor, List<producto> productosAgregar);
 
     public abstract boolean altaProducto(producto p);
 
-    public abstract producto getProducto(long id);
+    public abstract producto getProducto(Long id);
 
     public abstract List<producto> getProductosDisponibles();
 
@@ -82,7 +82,7 @@ public interface iControladorVentas {
 
     public abstract List<producto> getProductosTotales();
 
-    public abstract List<producto> getProductosXproveedor(long id);
+    public abstract List<producto> getProductosXproveedor(Long id);
 
     public abstract boolean setearEstadoProducto(Long id, int est);
 
