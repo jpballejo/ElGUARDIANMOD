@@ -36,6 +36,7 @@ public class cliente implements Serializable {
     private String tel_cel;
     private String token;
     private boolean estado;
+    
     @OneToMany(cascade = CascadeType.ALL)
     private List<venta> compras = null;
 
